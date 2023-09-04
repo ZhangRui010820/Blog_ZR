@@ -91,6 +91,16 @@
                        th:class="${active}=='article'?'waves-effect active':'waves-effect'"><i
                             class="fa fa-list" aria-hidden="true"></i><span> 文章管理 </span></a>
                 </li>
+                <li th:class="${active}=='teach'?'active':''">
+                    <a th:href="@{/admin/teachAdmin/publish}"
+                       th:class="${active}=='teach'?'waves-effect active':'waves-effect'"><i
+                            class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 发布教程 </span></a>
+                </li>
+                <li th:class="${active}=='admin'?'active':''">
+                    <a th:href="@{/admin/teachAdmin}"
+                       th:class="${active}=='admin'?'waves-effect active':'waves-effect'"><i
+                            class="fa fa-list" aria-hidden="true"></i><span> 教程管理 </span></a>
+                </li>
                 <!--<li th:class="${active}=='page'?'active':''">-->
                     <!--<a th:href="@{/admin/page}" th:class="${active}=='page'?'waves-effect active':'waves-effect'"><i-->
                             <!--class="fa fa-file-text" aria-hidden="true"></i><span> 页面管理 </span></a>-->

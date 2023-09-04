@@ -7,6 +7,7 @@ package com.wip.service.user.impl;
 
 import com.wip.constant.ErrorConstant;
 import com.wip.dao.UserDao;
+
 import com.wip.exception.BusinessException;
 import com.wip.model.UserDomain;
 import com.wip.service.user.UserService;

@@ -9,6 +9,7 @@ import com.wip.dto.cond.CommentCond;
 import com.wip.model.CommentDomain;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface CommentDao {
      * 添加评论
      * @param comments
      */
-    void addComment(CommentDomain comments);
+    public void addComment(CommentDomain comments);
 
     /**
      * 根据文章ID获取评论

@@ -9,14 +9,17 @@ import com.wip.dto.MetaDto;
 import com.wip.dto.StatisticsDto;
 import com.wip.dto.cond.ContentCond;
 import com.wip.dto.cond.MetaCond;
+import com.wip.dto.cond.TeachCond;
 import com.wip.exception.BusinessException;
 import com.wip.model.CommentDomain;
 import com.wip.model.ContentDomain;
 import com.wip.model.MetaDomain;
+import com.wip.model.TeachDomain;
 import com.wip.service.article.ContentService;
 import com.wip.service.comment.CommentService;
 import com.wip.service.meta.MetaService;
 import com.wip.service.site.SiteService;
+import com.wip.service.teach.TeachService;
 import com.wip.utils.APIResponse;
 import com.wip.utils.IPKit;
 import com.wip.utils.TaleUtils;
@@ -38,6 +41,9 @@ import java.util.List;
 @Api("博客前台页面")
 @Controller
 public class HomeController extends BaseController {
+
+    @Autowired
+    private TeachService teachService;
 
     @Autowired
     private ContentService contentService;
@@ -63,6 +69,23 @@ public class HomeController extends BaseController {
 
         request.setAttribute("articles",articles);
         return "blog/home";
+    }
+
+    @ApiOperation("教程内容页")
+    @GetMapping(value = "/teach")
+    public String teach(
+            HttpServletRequest request,
+            @ApiParam(name = "page", value = "页数", required = false)
+            @RequestParam(name = "page", required = false, defaultValue = "1")
+            int page,
+            @ApiParam(name = "limit", value = "每页数量", required = false)
+            @RequestParam(name = "limit", required = false, defaultValue = "5")
+            int limit
+    ) {
+        PageInfo<TeachDomain> articles = teachService.getArticlesByCond(new TeachCond(), page, limit);
+
+        request.setAttribute("articles",articles);
+        return "blog/teach";
     }
 
     @ApiOperation("归档内容页")
@@ -167,6 +190,7 @@ public class HomeController extends BaseController {
      * @param cid
      * @param chits
      */
+
     private void updateArticleHits(Integer cid, Integer chits) {
         Integer hits = cache.hget("article", "hits");
         if (chits == null) {
@@ -185,8 +209,9 @@ public class HomeController extends BaseController {
 
     }
 
-    @PostMapping(value = "/comment")
+
     @ResponseBody
+    @PostMapping(value = "/comment")
     public APIResponse comment(HttpServletRequest request, HttpServletResponse response,
                                @RequestParam(name = "cid", required = true) Integer cid,
                                @RequestParam(name = "coid", required = false) Integer coid,
@@ -194,15 +219,15 @@ public class HomeController extends BaseController {
                                @RequestParam(name = "email", required = false) String email,
                                @RequestParam(name = "url", required = false) String url,
                                @RequestParam(name = "content", required = true) String content,
-                               @RequestParam(name = "csrf_token", required = true) String csrf_token
-                               ) {
+                               @RequestParam(name = "csrf_token", required = true) String csrfToken
+    ) {
 
         String ref = request.getHeader("Referer");
-        if (StringUtils.isBlank(ref) || StringUtils.isBlank(csrf_token)){
+        if (StringUtils.isBlank(ref) || StringUtils.isBlank(csrfToken)){
             return APIResponse.fail("访问失败");
         }
 
-        String token = cache.hget(Types.CSRF_TOKEN.getType(), csrf_token);
+        String token = cache.hget(Types.CSRF_TOKEN.getType(), csrfToken);
         if (StringUtils.isBlank(token)) {
             return APIResponse.fail("访问失败");
         }
