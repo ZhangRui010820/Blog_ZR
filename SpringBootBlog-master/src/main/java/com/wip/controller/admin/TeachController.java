@@ -54,8 +54,11 @@ public class TeachController extends BaseController {
             @RequestParam(name = "limit", required = false, defaultValue = "15")
             int limit
     ) {
+        //获取教程内容
         PageInfo<TeachDomain> articles = teachService.getArticlesByCond(new TeachCond(), page, limit);
+        //教程存入request
         request.setAttribute("articles",articles);
+        //转发到页面
         return "admin/teach_list";
     }
 
@@ -125,6 +128,7 @@ public class TeachController extends BaseController {
     ) {
         TeachDomain teachDomain = new TeachDomain();
         teachDomain.setTitle(title);
+        //设置文章ID
         teachDomain.setTid(cid);
         teachDomain.setTitlePic(titlePic);
         teachDomain.setSlug(slug);

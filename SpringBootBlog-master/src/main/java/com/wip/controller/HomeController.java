@@ -82,9 +82,11 @@ public class HomeController extends BaseController {
             @RequestParam(name = "limit", required = false, defaultValue = "5")
             int limit
     ) {
+        //获取教程内容
         PageInfo<TeachDomain> articles = teachService.getArticlesByCond(new TeachCond(), page, limit);
-
+        //教程存入request
         request.setAttribute("articles",articles);
+        //转发到页面
         return "blog/teach";
     }
 
