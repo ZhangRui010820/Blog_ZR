@@ -13,8 +13,10 @@ import com.wip.dto.cond.CommentCond;
 import com.wip.exception.BusinessException;
 import com.wip.model.CommentDomain;
 import com.wip.model.ContentDomain;
+import com.wip.model.TeachDomain;
 import com.wip.service.article.ContentService;
 import com.wip.service.comment.CommentService;
+import com.wip.service.teach.TeachService;
 import com.wip.utils.DateKit;
 import com.wip.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +35,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentDao commentDao;
+
+    @Autowired
+    private TeachService teachService;
 
     @Autowired
     private ContentService contentService;
@@ -94,6 +99,55 @@ public class CommentServiceImpl implements CommentService {
 
         ContentDomain temp = new ContentDomain();
         temp.setCid(article.getCid());
+        Integer count = article.getCommentsNum();
+        if (null == count) {
+            count = 0;
+        }
+        temp.setCommentsNum(count + 1);
+        contentService.updateContentByCid(temp);
+
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(value = "commentCache", allEntries = true)
+    public void addTeachComment(CommentDomain comments) {
+        String msg = null;
+
+        if (null == comments) {
+            msg = "评论对象为空";
+        }
+
+        if (StringUtils.isBlank(comments.getAuthor())) {
+            comments.setAuthor("热心网友");
+        }
+        if (StringUtils.isNotBlank(comments.getEmail()) && !TaleUtils.isEmail(comments.getEmail())) {
+            msg =  "请输入正确的邮箱格式";
+        }
+        if (StringUtils.isBlank(comments.getContent())) {
+            msg = "评论内容不能为空";
+        }
+        if (comments.getContent().length() < 5 || comments.getContent().length() > 2000) {
+            msg = "评论字数在5-2000个字符";
+        }
+        if (null == comments.getCid()) {
+            msg = "评论文章不能为空";
+        }
+        if (msg != null)
+            throw BusinessException.withErrorCode(msg);
+
+        TeachDomain article = teachService.getArticleById(comments.getCid());
+        if (null == article) {
+            throw BusinessException.withErrorCode("该文章不存在");
+        }
+
+        comments.setOwnerId(article.getAuthorId());
+        comments.setStatus(STATUS_MAP.get(STATUS_BLANK));
+        comments.setCreated(DateKit.getCurrentUnixTime());
+        commentDao.addTeachComment(comments);
+
+        ContentDomain temp = new ContentDomain();
+        temp.setCid(article.getTid());
         Integer count = article.getCommentsNum();
         if (null == count) {
             count = 0;

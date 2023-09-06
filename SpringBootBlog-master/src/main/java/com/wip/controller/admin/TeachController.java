@@ -65,10 +65,15 @@ public class TeachController extends BaseController {
     @ApiOperation("发布新文章页")
     @GetMapping(value = "/publish")
     public String newArticle(HttpServletRequest request) {
+        //new Meta查询条件
         MetaCond metaCond = new MetaCond();
+        //设置类型
         metaCond.setType(Types.CATEGORY.getType());
+        //获取项目列表
         List<MetaDomain> metas = metaService.getMetas(metaCond);
+        //设置入request中
         request.setAttribute("categories",metas);
+        //转发到教程编辑页面
         return "admin/teach_edit";
     }
 
@@ -80,13 +85,20 @@ public class TeachController extends BaseController {
             Integer tid,
             HttpServletRequest request
     ) {
+        //根据ID获取教程文章
         TeachDomain content = teachService.getArticleById(tid);
+        //设置入request中
         request.setAttribute("contents", content);
+        //new Meta查询条件
         MetaCond metaCond = new MetaCond();
+        //设置类型
         metaCond.setType(Types.CATEGORY.getType());
+        //获取项目列表
         List<MetaDomain> categories = metaService.getMetas(metaCond);
+        //设置入request中
         request.setAttribute("categories", categories);
         request.setAttribute("active", "article");
+        //转发到教程编辑页面
         return "admin/teach_edit";
     }
 
@@ -126,7 +138,9 @@ public class TeachController extends BaseController {
             @RequestParam(name = "allowComment", required = true)
             Boolean allowComment
     ) {
+        //新建教程
         TeachDomain teachDomain = new TeachDomain();
+        //设置文章各种数据
         teachDomain.setTitle(title);
         //设置文章ID
         teachDomain.setTid(cid);
@@ -138,8 +152,9 @@ public class TeachController extends BaseController {
         teachDomain.setTags(tags);
         teachDomain.setCategories(categories);
         teachDomain.setAllowComment(allowComment ? 1: 0);
+        //保存文章
         teachService.updateArticleById(teachDomain);
-
+        //成功
         return APIResponse.success();
     }
 
@@ -176,7 +191,9 @@ public class TeachController extends BaseController {
             @RequestParam(name = "allowComment", required = true)
             Boolean allowComment
     ) {
+        //新建教程
         TeachDomain teachDomain = new TeachDomain();
+        //设置文章各种数据
         teachDomain.setTitle(title);
         teachDomain.setTitlePic(titlePic);
         teachDomain.setSlug(slug);
@@ -192,7 +209,7 @@ public class TeachController extends BaseController {
 
         // 添加文章
         teachService.addArticle(teachDomain);
-
+        //成功
         return APIResponse.success();
     }
 

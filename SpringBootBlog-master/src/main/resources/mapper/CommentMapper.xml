@@ -36,6 +36,30 @@
             #{content, jdbcType=LONGVARCHAR}
         </trim>
     </insert>
+    <!--添加教程评论-->
+    <insert id="addTeachComment" parameterType="com.wip.model.CommentDomain">
+        INSERT INTO
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            cid, created, author,authorId,ownerId,mail,
+            url, ip, agent, type, status, parent, content
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{cid, jdbcType=INTEGER},
+            #{created, jdbcType=INTEGER},
+            #{author, jdbcType=VARCHAR},
+            #{authorId, jdbcType=INTEGER},
+            #{ownerId, jdbcType=INTEGER},
+            #{email, jdbcType=VARCHAR},
+            #{url, jdbcType=VARCHAR},
+            #{ip, jdbcType=VARCHAR},
+            #{agent, jdbcType=VARCHAR},
+            #{type, jdbcType=VARCHAR},
+            #{status, jdbcType=VARCHAR},
+            #{parent, jdbcType=INTEGER},
+            #{content, jdbcType=LONGVARCHAR}
+        </trim>
+    </insert>
     <!--根据文章ID获取评论-->
     <select id="getCommentByCId" resultType="com.wip.model.CommentDomain">
         SELECT

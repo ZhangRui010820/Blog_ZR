@@ -20,7 +20,13 @@ public interface CommentService {
      * 添加评论
      * @param comments
      */
-    public void addComment(CommentDomain comments);
+    void addComment(CommentDomain comments);
+
+    /**
+     * 添加教程
+     * @param comments
+     */
+    void addTeachComment(CommentDomain comments);
 
     /**
      * 通过文章ID获取评论
