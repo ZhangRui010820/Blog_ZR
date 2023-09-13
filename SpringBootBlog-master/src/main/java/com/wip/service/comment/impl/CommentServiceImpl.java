@@ -17,6 +17,7 @@ import com.wip.model.TeachDomain;
 import com.wip.service.article.ContentService;
 import com.wip.service.comment.CommentService;
 import com.wip.service.teach.TeachService;
+import com.wip.utils.APIResponse;
 import com.wip.utils.DateKit;
 import com.wip.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -163,6 +164,14 @@ public class CommentServiceImpl implements CommentService {
         if (null == cid)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         return commentDao.getCommentByCId(cid);
+    }
+
+    @Override
+    @Cacheable(value = "commentCache", key = "'commentsByCId_' + #p0")
+    public List<CommentDomain> getTeachCommentsByCId(Integer cid) {
+        if (null == cid)
+            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        return commentDao.getTeachCommentsByCId(cid);
     }
 
     @Override

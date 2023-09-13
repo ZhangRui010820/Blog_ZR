@@ -74,6 +74,22 @@
         cm.created
     </select>
 
+    <!--根据文章ID获取评论-->
+    <select id="getTeachCommentsByCId" resultType="com.wip.model.CommentDomain">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/> AS cm
+        WHERE
+        cm.cid = #{cid, jdbcType=INTEGER}
+        AND
+        cm.status = 'approved'
+        AND
+        cm.type = 'teach'
+        ORDER BY
+        cm.created
+    </select>
+
     <!--删除评论-->
     <delete id="deleteComment">
         DELETE FROM

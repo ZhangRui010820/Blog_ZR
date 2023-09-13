@@ -38,6 +38,13 @@ public interface CommentDao {
      */
     List<CommentDomain> getCommentByCId(@Param("cid") Integer cid);
 
+    /**
+     * 通过教程文章ID获取评论
+     * @param cid
+     * @return
+     */
+    List<CommentDomain> getTeachCommentsByCId(Integer cid);
+
 
     /**
      * 删除评论

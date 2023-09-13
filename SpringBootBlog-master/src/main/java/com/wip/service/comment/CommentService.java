@@ -36,6 +36,13 @@ public interface CommentService {
     List<CommentDomain> getCommentsByCId(Integer cid);
 
     /**
+     * 通过教程文章ID获取评论
+     * @param cid
+     * @return
+     */
+    List<CommentDomain> getTeachCommentsByCId(Integer cid);
+
+    /**
      * 根据条件获取评论列表
      * @param commentCond   查询条件
      * @param pageNum       分页参数 第几页

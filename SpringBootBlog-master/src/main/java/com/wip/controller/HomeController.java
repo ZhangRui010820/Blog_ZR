@@ -203,7 +203,7 @@ public class HomeController extends BaseController {
         // 更新文章的点击量
         this.updateArticleHits(article.getTid(),article.getHits());
         // 获取评论
-        List<CommentDomain> comments = commentService.getCommentsByCId(tid);
+        List<CommentDomain> comments = commentService.getTeachCommentsByCId(tid);
         request.setAttribute("comments", comments);
 
         return "blog/teach_detail";
@@ -272,8 +272,8 @@ public class HomeController extends BaseController {
             return APIResponse.fail("请输入正确的网址格式");
         }
 
-        if (content.length() > 200) {
-            return APIResponse.fail("请输入200个字符以内的评价");
+        if (content.length() < 5 || content.length() > 200) {
+            return APIResponse.fail("请输入5个字符以上,200字符以内的评价");
         }
 
         String val = IPKit.getIpAddressByRequest1(request) + ":" + cid;
@@ -367,8 +367,8 @@ public class HomeController extends BaseController {
             return APIResponse.fail("请输入正确的网址格式");
         }
 
-        if (content.length() > 200) {
-            return APIResponse.fail("请输入200个字符以内的评价");
+        if (content.length() < 5 || content.length() > 200) {
+            return APIResponse.fail("请输入5个字符以上,200字符以内的评价");
         }
 
         String val = IPKit.getIpAddressByRequest1(request) + ":" + tid;
@@ -392,6 +392,7 @@ public class HomeController extends BaseController {
         comments.setContent(content);
         comments.setEmail(email);
         comments.setParent(coid);
+        comments.setType("teach");
 
         try {
             commentService.addTeachComment(comments);
